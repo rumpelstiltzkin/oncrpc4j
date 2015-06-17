@@ -1888,6 +1888,31 @@ public class jrpcgen {
         out.println("        client = new RpcCall(program, version, auth, rpcClient.connect());");
         out.println("    }");
         out.println();
+
+        if (generateTimeoutSupport) {
+            out.println("    /**");
+            out.println("     * Constructs a <code>" + clientClass + "</code> client stub proxy object");
+            out.println("     * from which the " + programInfo.programId + " remote program can be accessed.");
+            out.println("     * @param host Internet address of host where to contact the remote program.");
+            out.println("     * @param port Port number at host where the remote program can be reached.");
+            out.println("     * @param auth {@link RpcAuth} to be used for RPC client authentication.");
+            out.println("     * @param program Remote program number.");
+            out.println("     * @param version Remote program version number.");
+            out.println("     * @param protocol {@link org.dcache.xdr.IpProtocolType} to be");
+            out.println("     *   used for ONC/RPC calls.");
+            out.println("     * @param timeout Timeout value used for the underlying transport.");
+            out.println("     * @param timeUnit Unit of expression of 'timeout'.");
+            out.println("     * @throws OncRpcException if an ONC/RPC error occurs.");
+            out.println("     * @throws IOException if an I/O error occurs.");
+            out.println("     */");
+            out.println("    public " + clientClass + "(InetAddress host, int port, RpcAuth auth, int program, int version, int protocol,");
+            out.println("           long timeout, TimeUnit timeUnit) throws OncRpcException, IOException {");
+            out.println("        rpcClient = new OncRpcClient(host, protocol, port);");
+            out.println("        client = new RpcCall(program, version, auth, rpcClient.connect(timeout, timeUnit));");
+            out.println("    }");
+            out.println();
+        }
+
         out.println("   /**");
         out.println("     * Shutdown client connection.");
         out.println("     *");
